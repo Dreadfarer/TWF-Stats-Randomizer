@@ -1,0 +1,98 @@
+export const archetypes = [
+  {
+    name: "Fast Weakling",
+    bst: { min: 350, max: 480 },
+    stats: {
+      hp:  { min: 40, max: 75 },
+      atk: { min: 60, max: 90 },
+      def: { min: 25, max: 90 },
+      spa: { min: 60, max: 90 },
+      spd: { min: 25, max: 90 },
+      spe: { min: 80, max: 140 },
+    },
+  },
+  {
+    name: "Strong Weakling",
+    bst: { min: 350, max: 480 },
+    stats: {
+      hp:  { min: 25, max: 75 },
+      atk: { min: 75, max: 140 },
+      def: { min: 25, max: 90 },
+      spa: { min: 75, max: 140 },
+      spd: { min: 25, max: 90 },
+      spe: { min: 60, max: 90 },
+    },
+  },
+  {
+    name: "Phys Tank",
+    bst: { min: 420, max: 535 },
+    stats: {
+      hp:  { min: 80, max: 120 },
+      atk: { min: 75, max: 110 },
+      def: { min: 80, max: 150 },
+      spa: { min: 20, max: 75 },
+      spd: { min: 80, max: 150 },
+      spe: { min: 5, max: 50 },
+    },
+  },
+  {
+    name: "SP Tank",
+    bst: { min: 420, max: 535 },
+    stats: {
+      hp:  { min: 80, max: 120 },
+      atk: { min: 20, max: 75 },
+      def: { min: 80, max: 150 },
+      spa: { min: 75, max: 110 },
+      spd: { min: 80, max: 150 },
+      spe: { min: 5, max: 50 },
+    },
+  },
+  {
+    name: "Attacker",
+    bst: { min: 420, max: 560 },
+    stats: {
+      hp:  { min: 50, max: 120 },
+      atk: { min: 90, max: 150 },
+      def: { min: 35, max: 100 },
+      spa: { min: 90, max: 150 },
+      spd: { min: 35, max: 100 },
+      spe: { min: 60, max: 135 },
+    },
+  },
+  {
+    name: "Pseudo",
+    bst: { min: 540, max: 660 },
+    stats: {
+      hp:  { min: 50, max: 140 },
+      atk: { min: 90, max: 170 },
+      def: { min: 55, max: 120 },
+      spa: { min: 90, max: 170 },
+      spd: { min: 55, max: 120 },
+      spe: { min: 60, max: 155 },
+    },
+  },
+  {
+    name: "Mythical",
+    bst: { min: 550, max: 680 },
+    stats: {
+      hp:  { min: 80, max: 150 },
+      atk: { min: 80, max: 130 },
+      def: { min: 80, max: 120 },
+      spa: { min: 80, max: 130 },
+      spd: { min: 80, max: 120 },
+      spe: { min: 80, max: 140 },
+    },
+  },
+  {
+    name: "Legendary",
+    bst: { min: 600, max: 750 },
+    stats: {
+      hp:  { min: 80, max: 200 },
+      atk: { min: 80, max: 175 },
+      def: { min: 80, max: 140 },
+      spa: { min: 80, max: 175 },
+      spd: { min: 80, max: 140 },
+      spe: { min: 80, max: 150 },
+    },
+  },
+];
