@@ -1,121 +1,157 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+import { archetypes } from './data/archetypes'
+import { startRoll, rollNextStat, getEffectiveRange } from './logic/roll'
 import './App.css'
 
+const STAT_LABELS = {
+  hp: 'HP',
+  atk: 'Attack',
+  def: 'Defense',
+  spa: 'Sp. Atk',
+  spd: 'Sp. Def',
+  spe: 'Speed',
+}
+
 function App() {
-  const [count, setCount] = useState(0)
+  const [available, setAvailable] = useState(archetypes)
+  const [current, setCurrent] = useState(null) // { archetype, rollState }
+  const [completed, setCompleted] = useState([])
+
+  const handleSelectArchetype = (e) => {
+    const name = e.target.value
+    if (!name) return
+    const archetype = available.find((a) => a.name === name)
+    setAvailable(available.filter((a) => a.name !== name))
+    setCurrent({ archetype, rollState: startRoll(archetype) })
+  }
+
+  const handleRollStat = (statName) => {
+    const { state } = rollNextStat(current.rollState, statName)
+    if (state.remaining.length === 0) {
+      setCompleted([
+        ...completed,
+        { name: current.archetype.name, bst: state.targetBST, stats: state.rolled },
+      ])
+      setCurrent(null)
+    } else {
+      setCurrent({ archetype: current.archetype, rollState: state })
+    }
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="App">
+      <h1>Welcome to the TWF Stats Randomizer</h1>
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+      <div className="layout">
+        <div className="reference-panel">
+          <h2>Archetype Ranges</h2>
+          <div className="reference-table-wrap">
+            <table className="reference-table">
+              <thead>
+                <tr>
+                  <th>Archetype</th>
+                  <th>BST</th>
+                  {Object.keys(archetypes[0].stats).map((stat) => (
+                    <th key={stat}>{STAT_LABELS[stat]}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {archetypes.map((archetype) => (
+                  <tr
+                    key={archetype.name}
+                    className={current?.archetype.name === archetype.name ? 'active' : ''}
+                  >
+                    <td>{archetype.name}</td>
+                    <td>
+                      {archetype.bst.min}–{archetype.bst.max}
+                    </td>
+                    {Object.keys(archetype.stats).map((stat) => (
+                      <td key={stat}>
+                        {archetype.stats[stat].min}–{archetype.stats[stat].max}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+        <div className="main-panel">
+          {!current && (
+            <>
+              <p>Select an archetype to randomize stats:</p>
+              <select onChange={handleSelectArchetype} value="">
+                <option value="">--Select an archetype--</option>
+                {available.map((archetype) => (
+                  <option key={archetype.name} value={archetype.name}>
+                    {archetype.name}
+                  </option>
+                ))}
+              </select>
+              {available.length === 0 && <p>All archetypes generated.</p>}
+            </>
+          )}
+
+          {current && (
+            <div className="current-roll">
+              <h2>{current.archetype.name}</h2>
+              <p>
+                Target BST: {current.rollState.targetBST}{' '}
+                <span className="pool-counter">(Remaining pool: {current.rollState.pool})</span>
+              </p>
+
+              <div className="stat-grid">
+                {Object.keys(current.archetype.stats).map((stat) => {
+                  if (stat in current.rollState.rolled) {
+                    return (
+                      <div key={stat} className="stat-row rolled">
+                        <span className="stat-label">{STAT_LABELS[stat]}</span>
+                        <span className="stat-value">{current.rollState.rolled[stat]}</span>
+                      </div>
+                    )
+                  }
+
+                  const effective = getEffectiveRange(current.rollState, stat)
+                  return (
+                    <button
+                      key={stat}
+                      className="stat-row pending"
+                      onClick={() => handleRollStat(stat)}
+                    >
+                      <span className="stat-label">{STAT_LABELS[stat]}</span>
+                      <span className="stat-effective">
+                        eff. {effective.min}–{effective.max}
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="summary-panel">
+          <h2>Generated Archetypes</h2>
+          {completed.length === 0 && <p>None yet.</p>}
+          {completed.map((entry) => (
+            <div key={entry.name} className="summary-card">
+              <h3>{entry.name}</h3>
+              <p className="summary-bst">BST: {entry.bst}</p>
+              <ul>
+                {Object.entries(entry.stats).map(([stat, value]) => (
+                  <li key={stat}>
+                    <span>{STAT_LABELS[stat]}</span>
+                    <span>{value}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   )
 }
 

@@ -16,8 +16,8 @@ export function startRoll(archetype) {
     };
 }
 
-export function rollNextStat(rollState, statName) {
-    const { archetype, rolled, remaining, pool } = rollState;
+export function getEffectiveRange(rollState, statName) {
+    const { archetype, remaining, pool } = rollState;
     const min = archetype.stats[statName].min;
     const max = archetype.stats[statName].max;
 
@@ -27,10 +27,18 @@ export function rollNextStat(rollState, statName) {
 
     // Don't take so much that remaining stats can't reach their minimums,
     // and don't take so little that remaining stats can't absorb the leftover within their maximums.
-    const effectiveMin = Math.max(min, pool - maxRemainingBST);
-    const effectiveMax = Math.min(max, pool - minRemainingBST);
+    return {
+        min: Math.max(min, pool - maxRemainingBST),
+        max: Math.min(max, pool - minRemainingBST),
+    };
+}
+
+export function rollNextStat(rollState, statName) {
+    const { archetype, rolled, remaining, pool } = rollState;
+    const { min: effectiveMin, max: effectiveMax } = getEffectiveRange(rollState, statName);
     const value = getRandomInt(effectiveMin, effectiveMax);
 
+    const remainingAfterThis = remaining.filter((s) => s !== statName);
     const state = {
         archetype,
         targetBST: rollState.targetBST,
