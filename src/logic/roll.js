@@ -11,6 +11,7 @@ export function startRoll(archetype) {
         archetype,
         targetBST,
         rolled: {},
+        rolledRanges: {},
         remaining: Object.keys(archetype.stats),
         pool: targetBST,
     };
@@ -34,15 +35,16 @@ export function getEffectiveRange(rollState, statName) {
 }
 
 export function rollNextStat(rollState, statName) {
-    const { archetype, rolled, remaining, pool } = rollState;
-    const { min: effectiveMin, max: effectiveMax } = getEffectiveRange(rollState, statName);
-    const value = getRandomInt(effectiveMin, effectiveMax);
+    const { archetype, rolled, rolledRanges, remaining, pool } = rollState;
+    const effectiveRange = getEffectiveRange(rollState, statName);
+    const value = getRandomInt(effectiveRange.min, effectiveRange.max);
 
     const remainingAfterThis = remaining.filter((s) => s !== statName);
     const state = {
         archetype,
         targetBST: rollState.targetBST,
         rolled: { ...rolled, [statName]: value },
+        rolledRanges: { ...rolledRanges, [statName]: effectiveRange },
         remaining: remainingAfterThis,
         pool: pool - value,
     };

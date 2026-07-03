@@ -1,6 +1,13 @@
+export const tierPickCounts = {
+  1: 2,
+  2: 3,
+  3: 2,
+};
+
 export const archetypes = [
   {
-    name: "Fast Weakling",
+    name: "DiceLett",
+    tier: 1,
     bst: { min: 350, max: 480 },
     stats: {
       hp:  { min: 40, max: 75 },
@@ -12,7 +19,8 @@ export const archetypes = [
     },
   },
   {
-    name: "Strong Weakling",
+    name: "OddIsh",
+    tier: 1,
     bst: { min: 350, max: 480 },
     stats: {
       hp:  { min: 25, max: 75 },
@@ -24,8 +32,35 @@ export const archetypes = [
     },
   },
   {
-    name: "Phys Tank",
-    bst: { min: 420, max: 535 },
+    name: "BidOof",
+    tier: 1,
+    bst: { min: 350, max: 480 },
+    stats: {
+      hp:  { min: 80, max: 125 },
+      atk: { min: 50, max: 90 },
+      def: { min: 50, max: 120 },
+      spa: { min: 50, max: 90 },
+      spd: { min: 50, max: 120 },
+      spe: { min: 5, max: 75 },
+    },
+  },
+  {
+    name: "MetapOdds",
+    tier: 1,
+    bst: { min: 400, max: 475 },
+    stats: {
+      hp:  { min: 20, max: 120 },
+      atk: { min: 20, max: 120 },
+      def: { min: 20, max: 120 },
+      spa: { min: 20, max: 120 },
+      spd: { min: 20, max: 120 },
+      spe: { min: 20, max: 120 },
+    },
+  },
+  {
+    name: "DieDon",
+    tier: 2,
+    bst: { min: 460, max: 550 },
     stats: {
       hp:  { min: 80, max: 120 },
       atk: { min: 75, max: 110 },
@@ -36,8 +71,9 @@ export const archetypes = [
     },
   },
   {
-    name: "SP Tank",
-    bst: { min: 420, max: 535 },
+    name: "Chancey",
+    tier: 2,
+    bst: { min: 460, max: 550 },
     stats: {
       hp:  { min: 80, max: 120 },
       atk: { min: 20, max: 75 },
@@ -48,8 +84,9 @@ export const archetypes = [
     },
   },
   {
-    name: "Attacker",
-    bst: { min: 420, max: 560 },
+    name: "LuckArio",
+    tier: 2,
+    bst: { min: 450, max: 560 },
     stats: {
       hp:  { min: 50, max: 120 },
       atk: { min: 90, max: 150 },
@@ -60,20 +97,61 @@ export const archetypes = [
     },
   },
   {
-    name: "Pseudo",
-    bst: { min: 540, max: 660 },
+    name: "MaChance",
+    tier: 2,
+    bst: { min: 450, max: 550 },
     stats: {
-      hp:  { min: 50, max: 140 },
-      atk: { min: 90, max: 170 },
-      def: { min: 55, max: 120 },
-      spa: { min: 90, max: 170 },
-      spd: { min: 55, max: 120 },
+      hp:  { min: 60, max: 120 },
+      atk: { min: 50, max: 180 },
+      def: { min: 30, max: 100 },
+      spa: { min: 10, max: 80 },
+      spd: { min: 30, max: 100 },
+      spe: { min: 30, max: 110 },
+    },
+  },
+  {
+    name: "GambleGar",
+    tier: 2,
+    bst: { min: 450, max: 550 },
+    stats: {
+      hp:  { min: 20, max: 90 },
+      atk: { min: 10, max: 80 },
+      def: { min: 25, max: 100 },
+      spa: { min: 60, max: 190 },
+      spd: { min: 25, max: 100 },
+      spe: { min: 25, max: 130 },
+    },
+  },
+  {
+    name: "All-in-Kazam",
+    tier: 2,
+    bst: { min: 550, max: 620 },
+    stats: {
+      hp:  { min: 10, max: 150 },
+      atk: { min: 10, max: 150 },
+      def: { min: 10, max: 150 },
+      spa: { min: 10, max: 150 },
+      spd: { min: 10, max: 150 },
+      spe: { min: 10, max: 150 },
+    },
+  },
+  {
+    name: "GambleChomp",
+    tier: 2,
+    bst: { min: 500, max: 660 },
+    stats: {
+      hp:  { min: 60, max: 140 },
+      atk: { min: 80, max: 170 },
+      def: { min: 40, max: 120 },
+      spa: { min: 80, max: 170 },
+      spd: { min: 40, max: 120 },
       spe: { min: 60, max: 155 },
     },
   },
   {
-    name: "Mythical",
-    bst: { min: 550, max: 680 },
+    name: "MythiCall",
+    tier: 3,
+    bst: { min: 580, max: 700 },
     stats: {
       hp:  { min: 80, max: 150 },
       atk: { min: 80, max: 130 },
@@ -84,15 +162,42 @@ export const archetypes = [
     },
   },
   {
-    name: "Legendary",
-    bst: { min: 600, max: 750 },
+    name: "LegendAnte",
+    tier: 3,
+    bst: { min: 550, max: 750 },
     stats: {
-      hp:  { min: 80, max: 200 },
-      atk: { min: 80, max: 175 },
-      def: { min: 80, max: 140 },
-      spa: { min: 80, max: 175 },
-      spd: { min: 80, max: 140 },
-      spe: { min: 80, max: 150 },
+      hp:  { min: 70, max: 180 },
+      atk: { min: 70, max: 175 },
+      def: { min: 70, max: 150 },
+      spa: { min: 70, max: 175 },
+      spd: { min: 70, max: 150 },
+      spe: { min: 50, max: 160 },
+    },
+  },
+  {
+    name: "Dice-Iggigas",
+    tier: 3,
+    bst: { min: 500, max: 800 },
+    stats: {
+      hp:  { min: 20, max: 200 },
+      atk: { min: 20, max: 200 },
+      def: { min: 20, max: 200 },
+      spa: { min: 20, max: 200 },
+      spd: { min: 20, max: 200 },
+      spe: { min: 20, max: 200 },
+    },
+  },
+  {
+    name: "Ace-Eus",
+    tier: 3,
+    bst: { min: 400, max: 900 },
+    stats: {
+      hp:  { min: 1, max: 220 },
+      atk: { min: 1, max: 220 },
+      def: { min: 1, max: 220 },
+      spa: { min: 1, max: 220 },
+      spd: { min: 1, max: 220 },
+      spe: { min: 1, max: 220 },
     },
   },
 ];

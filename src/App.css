@@ -55,6 +55,60 @@
   color: var(--text-h);
 }
 
+.tier-block + .tier-block {
+  margin-top: 24px;
+}
+
+.tier-block h3 {
+  margin: 0;
+  font-size: 16px;
+  color: var(--text-h);
+}
+
+.tier-block.locked {
+  opacity: 0.45;
+}
+
+.tier-quota {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text);
+}
+
+.tier-locked-tag {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text);
+  font-style: italic;
+}
+
+.quota-status {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.quota-pill {
+  font-family: var(--mono);
+  font-size: 13px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+}
+
+.quota-pill.locked {
+  opacity: 0.5;
+  font-style: italic;
+}
+
+.tier-tag {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--accent);
+}
+
 .main-panel {
   flex: 2;
   min-width: 0;
@@ -66,6 +120,97 @@
   border-radius: 6px;
   border: 1px solid var(--border);
   margin-top: 12px;
+}
+
+.roll-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 100;
+}
+
+.roll-overlay-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 40px;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  text-align: center;
+}
+
+.roll-overlay-card h2 {
+  font-size: 32px;
+}
+
+.roll-overlay-card .pool-counter {
+  font-size: 17px;
+}
+
+.roll-overlay-card .stat-grid {
+  margin-top: 28px;
+}
+
+.roll-overlay-card .stat-row {
+  font-size: 20px;
+  padding: 12px 16px;
+}
+
+.confirm-card {
+  max-width: 420px;
+}
+
+.confirm-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 28px;
+}
+
+.confirm-button {
+  cursor: pointer;
+  margin-top: 28px;
+  padding: 12px 28px;
+  font: inherit;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--bg);
+  background: var(--accent);
+  border: none;
+  border-radius: 8px;
+  transition: opacity 0.2s;
+
+  &:hover {
+    opacity: 0.85;
+  }
+}
+
+.confirm-actions .confirm-button {
+  margin-top: 0;
+}
+
+.cancel-button {
+  cursor: pointer;
+  padding: 12px 28px;
+  font: inherit;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-h);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: border-color 0.2s;
+
+  &:hover {
+    border-color: var(--text-h);
+  }
 }
 
 .summary-panel {
@@ -90,7 +235,7 @@
 
 .stat-row {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr auto 1fr;
   gap: 12px;
   align-items: center;
   padding: 8px 12px;
@@ -104,6 +249,10 @@
   text-align: left;
 }
 
+.stat-row .stat-value {
+  text-align: center;
+}
+
 .stat-row.rolled {
   color: var(--text-h);
   background: var(--code-bg);
@@ -111,6 +260,44 @@
 
 .stat-row.rolled .stat-value {
   font-weight: 600;
+}
+
+.stat-row.rolled .stat-effective {
+  color: var(--text);
+  font-size: 14px;
+}
+
+.animated-number {
+  font-variant-numeric: tabular-nums;
+}
+
+.animated-number.is-rolling {
+  color: var(--accent);
+  text-shadow: 0 0 10px var(--accent-border);
+}
+
+.animated-number.tier-low {
+  color: #e5484d;
+}
+
+.animated-number.tier-mid {
+  color: #ca8a04;
+}
+
+.animated-number.tier-high {
+  color: #2f9e58;
+}
+
+.animated-number.is-rolling.tier-low {
+  text-shadow: 0 0 10px rgba(229, 72, 77, 0.5);
+}
+
+.animated-number.is-rolling.tier-mid {
+  text-shadow: 0 0 10px rgba(202, 138, 4, 0.5);
+}
+
+.animated-number.is-rolling.tier-high {
+  text-shadow: 0 0 10px rgba(47, 158, 88, 0.5);
 }
 
 button.stat-row.pending {
@@ -131,10 +318,54 @@ button.stat-row.pending {
   font-size: 14px;
 }
 
+button.stat-row.pending.locked {
+  cursor: not-allowed;
+  opacity: 0.45;
+
+  &:hover {
+    border-color: var(--accent-border);
+  }
+}
+
 .pool-counter {
   font-family: var(--mono);
   color: var(--accent);
   font-size: 15px;
+}
+
+.final-results {
+  padding: 0 32px 32px;
+  text-align: left;
+
+  @media (max-width: 1024px) {
+    padding: 0 20px 24px;
+  }
+}
+
+.final-results h2 {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.final-tier-row + .final-tier-row {
+  margin-top: 28px;
+}
+
+.final-tier-row h3 {
+  margin: 0 0 12px;
+  color: var(--text-h);
+}
+
+.final-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.final-grid .summary-card {
+  flex: 1 1 260px;
+  max-width: 320px;
+  margin-bottom: 0;
 }
 
 .summary-card {
