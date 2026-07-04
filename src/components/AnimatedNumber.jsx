@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 // Checkpoints the counter passes through on the way up — only ones between
 // the start and the final value apply, so bigger rolls cross more of them.
 // Each segment after a checkpoint runs slower than the last, so it feels like it's grinding to a halt.
-const CHECKPOINTS = [75, 125, 175, 225, 300, 400, 450, 500, 550, 600, 720, 740, 760, 780, 800,820,840,860,880, 900];
+const CHECKPOINTS = [75, 125, 175, 225, 300, 400, 450, 500, 550, 600, 720, 740, 760, 780, 800,];
 const BASE_CLIMB_MS = 1500;
 const SLOWDOWN_FACTOR = 1.2;
 const FINAL_MS = 3500;

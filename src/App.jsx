@@ -23,9 +23,12 @@ function App() {
   const [finishedAnimations, setFinishedAnimations] = useState(new Set())
   const [pendingArchetype, setPendingArchetype] = useState(null)
   const [bstRevealed, setBstRevealed] = useState(false)
+  const [freePickMode, setFreePickMode] = useState(false)
 
   const activeTier = TIERS.find((tier) => remainingQuota[tier] > 0)
   const draftComplete = activeTier === undefined && !current
+  const isTierPickable = (tier) =>
+    remainingQuota[tier] > 0 && (freePickMode || tier === activeTier)
 
   const handleSelectArchetype = (e) => {
     const name = e.target.value
@@ -71,6 +74,15 @@ function App() {
 
   return (
     <div className="App">
+      <label className="pick-mode-toggle">
+        <input
+          type="checkbox"
+          checked={freePickMode}
+          onChange={(e) => setFreePickMode(e.target.checked)}
+        />
+        Free pick
+      </label>
+
       <h1>Welcome to the TWF Stats Randomizer</h1>
 
       {draftComplete ? (
@@ -109,7 +121,7 @@ function App() {
           {TIERS.map((tier) => {
             const tierArchetypes = archetypes.filter((a) => a.tier === tier)
             if (tierArchetypes.length === 0) return null
-            const locked = tier !== activeTier && tier > (activeTier ?? Infinity)
+            const locked = remainingQuota[tier] > 0 && !isTierPickable(tier)
             return (
               <div key={tier} className={`tier-block${locked ? ' locked' : ''}`}>
                 <h3>
@@ -157,7 +169,7 @@ function App() {
             <>
               <p className="quota-status">
                 {TIERS.map((tier) => {
-                  const locked = tier !== activeTier && tier > (activeTier ?? Infinity)
+                  const locked = remainingQuota[tier] > 0 && !isTierPickable(tier)
                   return (
                     <span key={tier} className={`quota-pill${locked ? ' locked' : ''}`}>
                       Tier {tier}: {locked ? 'locked' : `${remainingQuota[tier]} left`}
@@ -166,16 +178,24 @@ function App() {
                 })}
               </p>
 
-              <p>Select a Tier {activeTier} archetype to randomize stats:</p>
+              <p>
+                {freePickMode
+                  ? 'Select an archetype to randomize stats:'
+                  : `Select a Tier ${activeTier} archetype to randomize stats:`}
+              </p>
               <select onChange={handleSelectArchetype} value="">
                 <option value="">--Select an archetype--</option>
-                {available
-                  .filter((a) => a.tier === activeTier)
-                  .map((archetype) => (
-                    <option key={archetype.name} value={archetype.name}>
-                      {archetype.name}
-                    </option>
-                  ))}
+                {TIERS.filter(isTierPickable).map((tier) => (
+                  <optgroup key={tier} label={`Tier ${tier}`}>
+                    {available
+                      .filter((a) => a.tier === tier)
+                      .map((archetype) => (
+                        <option key={archetype.name} value={archetype.name}>
+                          {archetype.name}
+                        </option>
+                      ))}
+                  </optgroup>
+                ))}
               </select>
             </>
           )}
